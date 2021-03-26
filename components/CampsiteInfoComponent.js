@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, Alert, PanResponder } from 'react-native';
-import { Card, Icon, Rating, Input } from 'react-native-elements';
+import { Text, View, ScrollView, FlatList,
+    Modal, Button, StyleSheet,
+    Alert, PanResponder, Share } from 'react-native';import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite, postComment } from '../redux/ActionCreators';
@@ -59,6 +60,16 @@ function RenderCampsite(props) {
         }
     });
 
+    const shareCampsite = (title, message, url) => {
+        Share.share({
+            title: title,
+            message: `${title}: ${message} ${url}`,
+            url: url
+        },{
+            dialogTitle: 'Share ' + title
+        });
+    };
+
     if (campsite) {
         return (
             <Animatable.View
@@ -81,14 +92,24 @@ function RenderCampsite(props) {
                             color='#f50'
                             raised
                             reverse
-                            onPress={() => props.markFavorite()} />
+                            onPress={() => props.markFavorite()} 
+                        />
                         <Icon
                             name='pencil'
                             type='font-awesome'
                             color='#5637DD'
                             raised
                             reverse
-                            onPress={() => props.onShowModal()} />
+                            onPress={() => props.onShowModal()} 
+                        />
+                        <Icon
+                            name={'share'}
+                            type='font-awesome'
+                            color='#5637DD'
+                            raised
+                            reverse
+                            onPress={() => shareCampsite(campsite.name, campsite.description, baseUrl + campsite.image)} 
+                        />
                     </View>
                 </Card>
             </Animatable.View>
